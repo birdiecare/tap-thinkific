@@ -1,0 +1,22 @@
+{
+    "type": ["null", "object"],
+    
+    "properties": {
+      "id": { "type": ["integer"]},
+      "created_at": {"type": ["null", "string"], "format": "date-time"},
+      "user_email": { "type": ["null", "string"]},
+      "user_name": { "type": ["null", "string"]},
+      "expiry_date": {"type": ["null", "string"], "format": "date-time"},
+      "user_id": { "type": ["null", "integer"]},
+      "course_name": { "type": ["null", "string"]},
+      "course_id": { "type": ["null", "integer"]},
+      "percentage_completed": { "type": ["null", "string"], "format": "number"},
+      "completed_at": {"type": ["null", "string"], "format": "date-time"},
+      "expired": {"type": ["null", "boolean"]},
+      "is_free_trial": {"type": ["null", "boolean"]},
+      "completed": {"type": ["null", "boolean"]},
+      "started_at": {"type": ["null", "string"], "format": "date-time"},
+      "activated_at": {"type": ["null", "string"], "format": "date-time"},
+      "updated_at": {"type": ["string"], "format": "date-time"}
+    }
+}
