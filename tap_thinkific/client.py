@@ -56,8 +56,6 @@ class thinkificStream(RESTStream):
         """Return a dictionary of values to be used in URL parameterization."""
         params: dict = {}
 
-        params["query[updated_after]"] = self.get_starting_timestamp(context).strftime(self.api_date_format)
-
         if next_page_token:
             params["page"] = next_page_token
 
