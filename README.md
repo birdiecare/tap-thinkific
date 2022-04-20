@@ -1,37 +1,52 @@
 # tap-thinkific
 
-`tap-thinkific` is a Singer tap for thinkific.
+This repo contains a Singer "tap" for downloading data from www.thinkific.com. The tap conforms to the Singer specification and can be used standalone or with Meltano (recommended) to send data to wide variety of destinations for analysis. See here for a list of Meltano destinations: https://hub.meltano.com/loaders/.
 
-Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
+The tap is built with the [Meltano Tap SDK](https://sdk.meltano.com).
+
+## Supported Streams
+
+The tap currently downloads data from these endpoints:
+- [/courses](https://developers.thinkific.com/api/api-documentation/#/Courses/getCourses)
+- [/enrollments](https://developers.thinkific.com/api/api-documentation/#/Enrollments/getEnrollments)
+
+A full list of thinkific endpoints is available at https://developers.thinkific.com/api/api-documentation. Please submit an issue to request other endpoints or feel free to open up a PR.
 
 ## Installation
 
-- [ ] `Developer TODO:` Update the below as needed to correctly describe the install procedure. For instance, if you do not have a PyPi repo, or if you want users to directly install from your git repo, you can modify this step as appropriate.
+#### Pip 
+This tap isn't currently published on PyPi. You can install directly with
 
 ```bash
-pipx install tap-thinkific
+pipx install git+https://github.com/birdiecare/tap-thinkific.git
 ```
+
+#### Meltano
+Similarly this tap isn't available on the meltano hub yet. You can still install it directly with 
+
+```bash
+meltano add --custom extractor tap-thinkific
+```
+...and specifying `git+https://github.com/birdiecare/tap-thinkific.git` as the pip URL.
 
 ## Configuration
 
-### Accepted Config Options
+The tap takes three configuration inputs:
 
-- [ ] `Developer TODO:` Provide a list of config options accepted by the tap.
-
-A full list of supported settings and capabilities for this
-tap is available by running:
-
-```bash
-tap-thinkific --about
+```json
+{
+    "api_key": "<your_thinkific_api_key>",
+    "subdomain": "<your_thinkific_subdomain",
+    "start_date": "2022-01-18T00:00:00Z"
+}
 ```
 
-### Source Authentication and Authorization
+Only enrollments created or updated after the `start_date` will be downloaded. The `subdomain` and `api_key` are obtained from your Thinkific settings. See here for instructions: https://developers.thinkific.com/api/api-key-auth
 
-- [ ] `Developer TODO:` If your tap requires special access on the source system, or any special authentication requirements, provide those here.
 
 ## Usage
 
-You can easily run `tap-thinkific` by itself or in a pipeline using [Meltano](https://meltano.com/).
+You can test the tap by itself or in a pipeline using [Meltano](https://meltano.com/).
 
 ### Executing the Tap Directly
 
@@ -41,61 +56,4 @@ tap-thinkific --help
 tap-thinkific --config CONFIG --discover > ./catalog.json
 ```
 
-## Developer Resources
-
-- [ ] `Developer TODO:` As a first step, scan the entire project for the text "`TODO:`" and complete any recommended steps, deleting the "TODO" references once completed.
-
-### Initialize your Development Environment
-
-```bash
-pipx install poetry
-poetry install
-```
-
-### Create and Run Tests
-
-Create tests within the `tap_thinkific/tests` subfolder and
-  then run:
-
-```bash
-poetry run pytest
-```
-
-You can also test the `tap-thinkific` CLI interface directly using `poetry run`:
-
-```bash
-poetry run tap-thinkific --help
-poetry run tap-thinkific --config test_config.json
-```
-
-### Testing with [Meltano](https://www.meltano.com)
-
-_**Note:** This tap will work in any Singer environment and does not require Meltano.
-Examples here are for convenience and to streamline end-to-end orchestration scenarios._
-
-Your project comes with a custom `meltano.yml` project file already created. Open the `meltano.yml` and follow any _"TODO"_ items listed in
-the file.
-
-Next, install Meltano (if you haven't already) and any needed plugins:
-
-```bash
-# Install meltano
-pipx install meltano
-# Initialize meltano within this directory
-cd tap-thinkific
-meltano install
-```
-
-Now you can test and orchestrate using Meltano:
-
-```bash
-# Test invocation:
-meltano invoke tap-thinkific --version
-# OR run a test `elt` pipeline:
-meltano elt tap-thinkific target-jsonl
-```
-
-### SDK Dev Guide
-
-See the [dev guide](https://sdk.meltano.com/en/latest/dev_guide.html) for more instructions on how to use the SDK to 
-develop your own taps and targets.
+See https://www.singer.io/#what-it-is for more info on running singer taps and targets.
