@@ -22,12 +22,12 @@ pipx install git+https://github.com/birdiecare/tap-thinkific.git
 ```
 
 #### Meltano
-Similarly this tap isn't available on the meltano hub yet. You can still install it directly with 
+
+You can install this tap using [Meltano](https://github.com/meltano/meltano) via [MeltanoHub](https://hub.meltano.com/extractors/tap-thinkific--birdiecare/).
 
 ```bash
-meltano add --custom extractor tap-thinkific
+meltano add extractor tap-thinkific --variant birdiecare
 ```
-...and specifying `git+https://github.com/birdiecare/tap-thinkific.git` as the pip URL.
 
 ## Configuration
 
