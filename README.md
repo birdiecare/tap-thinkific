@@ -65,6 +65,6 @@ See https://www.singer.io/#what-it-is for more info on running singer taps and t
 docker build --tag meltano_tap_thinkific:0.1 .
 docker run --name my_tap_thinkific -d meltano_tap_thinkific:0.1
 
-# Run the according to your .env file
+# Run the according to your .env file. Notice that it's loading data into Snowflake. Consider changing it if you want to use any other
 docker run --env-file .env meltano_tap_thinkific:0.1 elt tap-thinkific target-snowflake --state-id=thinkific-to-snowflake
 ```
