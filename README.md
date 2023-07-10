@@ -57,3 +57,14 @@ tap-thinkific --config CONFIG --discover > ./catalog.json
 ```
 
 See https://www.singer.io/#what-it-is for more info on running singer taps and targets.
+
+
+## Run tap_thinkific tap in Docker Container
+
+```bash
+docker build --tag meltano_tap_thinkific:0.1 .
+docker run --name my_tap_thinkific -d meltano_tap_thinkific:0.1
+
+# Run the according to your .env file
+docker run --env-file .env meltano_tap_thinkific:0.1 elt tap-thinkific target-snowflake --state-id=thinkific-to-snowflake
+```
