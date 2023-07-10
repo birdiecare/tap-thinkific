@@ -1,0 +1,39 @@
+version: 1
+send_anonymous_usage_stats: true
+project_id: 82cd5745-6c1b-4eb5-8ddb-adb99b42f87e
+plugins:
+  extractors:
+    - name: tap-thinkific
+      variant: birdiecare
+      load_schema: THINKIFIC
+      namespace: tap_thinkific
+      pip_url: file:./
+      executable: tap-thinkific
+      capabilities:
+      - catalog
+      - state
+      - discover
+      settings:
+      - name: subdomain
+      - name: api_key
+        kind: password
+      - name: start_date
+        value: '2022-01-01T00:00:00Z'
+      config:
+        start_date: '2019-01-01T00:00:00Z'
+        api_key: $THINKIFIC_API_KEY
+        subdomain: $THINKIFIC_SUBDOMAIN
+
+  loaders:
+    - name: target-snowflake
+      variant: transferwise
+      pip_url: pipelinewise-target-snowflake
+      config:
+        account: $SNOWFLAKE_ACCOUNT
+        dbname: $SNOWFLAKE_ANALYTICS_DATABASE
+        user: ANALYTICS_SINGER_USER
+        role: ANALYTICS_ADMIN
+        password: $SNOWFLAKE_ANALYTICS_SINGER_USER_PASSWORD
+        warehouse: LOAD_AND_TRANSFORM
+        file_format: LANDING.PIPELINEWISE_TARGET_SNOWFLAKE_FILE_FORMAT
+        add_metadata_columns: true

@@ -1,14 +1,24 @@
 """REST client handling, including thinkificStream base class."""
 
-import requests, datetime
+import requests, backoff
 from pathlib import Path
-from typing import Any, Dict, Optional, Union, List, Iterable
+from typing import Any, Dict, Optional, List, Callable
+import logging
 
 from memoization import cached
 
 from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.streams import RESTStream
 from singer_sdk.authenticators import APIKeyAuthenticator
+from singer_sdk.exceptions import RetriableAPIError
+
+LOGGER = logging.getLogger()
+
+# Log handler
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+LOGGER.addHandler(handler)
+
 
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
@@ -60,3 +70,31 @@ class thinkificStream(RESTStream):
             params["page"] = next_page_token
 
         return params
+
+    def request_decorator(self, func: Callable) -> Callable:
+
+        def backoff_hdlr(details):
+            LOGGER.info("Backing off {wait:0.1f} seconds after {tries} tries "
+                        "calling function {target} with args {args} and kwargs "
+                        "{kwargs}".format(**details))
+
+
+        # Increase backoff factor and max tries from defaults (2 and 5 respectively)
+        decorator: Callable = backoff.on_exception(
+            backoff.expo,
+            (
+                RetriableAPIError,
+                requests.exceptions.ReadTimeout,
+            ),
+            max_tries=16,
+            factor=10,
+            on_backoff=backoff_hdlr,
+        )(func)
+        return decorator
+
+    def validate_response(self, response):
+
+        if response.status_code == 429: # 429 == too many requests
+            raise RetriableAPIError(response)
+        else:
+            super().validate_response(response)

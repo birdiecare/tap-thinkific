@@ -1,0 +1,27 @@
+version: 1
+disable_existing_loggers: false
+# See https://docs.meltano.com/guide/logging#datadog-logging-config for details.
+
+formatters:
+  structured_plain:
+    (): meltano.core.logging.console_log_formatter
+    colors: False
+  json:
+    (): meltano.core.logging.json_formatter
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: WARNING
+    formatter: structured_plain
+    stream: "ext://sys.stderr"
+  file:
+    class: logging.FileHandler
+    level: INFO
+    filename: meltano.log
+    formatter: json
+
+root:
+  level: DEBUG
+  propagate: yes
+  handlers: [console, file]
