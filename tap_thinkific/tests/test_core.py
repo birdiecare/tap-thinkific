@@ -1,7 +1,6 @@
 """Tests standard tap features using the built-in SDK tests library."""
 
 import datetime
-# from dotenv import load_dotenv
 import os
 import pytest
 
