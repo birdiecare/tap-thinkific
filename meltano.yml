@@ -29,7 +29,7 @@ plugins:
       variant: transferwise
       pip_url: git+https://github.com/augusthorlen0/pipelinewise-target-snowflake.git@be0a09ecfd97bcbf28d3488df5e5364a743ce768
       config:
-        account: aw65155.eu-west-2.aws
+        account: $SNOWFLAKE_ACCOUNT
         dbname: $SNOWFLAKE_ANALYTICS_DATABASE
         user: ANALYTICS_SINGER_USER
         role: ANALYTICS_ADMIN
