@@ -3,3 +3,4 @@
 test_config.json
 tap_thinkific/__pycache__/*.pyc
 tap_thinkific/tests/__pycache__/*.pyc
+.venv/*
