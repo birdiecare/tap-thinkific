@@ -1,31 +1,38 @@
 """Stream type classes for tap-thinkific."""
 
-from pathlib import Path
-from typing import Any, Dict, Optional, Union, List, Iterable
+from __future__ import annotations
+
+import sys
+from typing import Any, Dict, Optional
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
 
-from tap_thinkific.client import thinkificStream
+from tap_thinkific.client import ThinkificStream
 
-# Delete this is if not using json files for schema definition
-SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
+if sys.version_info >= (3, 9):
+    import importlib.resources as importlib_resources
+else:
+    import importlib_resources
 
-class CoursesStream(thinkificStream):
+
+SCHEMAS_DIR = importlib_resources.files(__package__) / "schemas"
+
+class CoursesStream(ThinkificStream):
     """Define stream for /courses endpoint."""
     name = "courses"
     path = "/courses"
     primary_keys = ["id"]
-    
+
     schema_filepath = SCHEMAS_DIR / "Courses.json"
 
-    
-class EnrollmentsStream(thinkificStream):
+
+class EnrollmentsStream(ThinkificStream):
     """Define stream for /enrollments endpoint."""
     name = "enrollments"
     path = "/enrollments"
     primary_keys = ["id"]
     replication_key = "updated_at"
-    
+
     schema_filepath = SCHEMAS_DIR / "Enrollments.json"
 
     def get_url_params(
