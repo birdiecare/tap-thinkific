@@ -4,7 +4,7 @@
     "properties": {
       "id": { "type": ["integer"]},
       "created_at": {"type": ["null", "string"], "format": "date-time"},
-      "user_email": { "type": ["null", "string"]},
+      "user_email": { "type": ["null", "string"], "maxLength": 256},
       "user_name": { "type": ["null", "string"]},
       "expiry_date": {"type": ["null", "string"], "format": "date-time"},
       "user_id": { "type": ["null", "integer"]},

@@ -1,24 +1,16 @@
-"""thinkific tap class."""
+"""Thinkific tap class."""
 
-from typing import List
+from __future__ import annotations
 
-from singer_sdk import Tap, Stream
+from singer_sdk import Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
 
-from tap_thinkific.streams import (
-    CoursesStream,
-    EnrollmentsStream,
-    thinkificStream
-)
-
-STREAM_TYPES = [
-    CoursesStream,
-    EnrollmentsStream
-]
+from tap_thinkific import streams
 
 
-class Tapthinkific(Tap):
-    """thinkific tap class."""
+class TapThinkific(Tap):
+    """Thinkific tap class."""
+
     name = "tap-thinkific"
 
     config_jsonschema = th.PropertiesList(
@@ -40,9 +32,17 @@ class Tapthinkific(Tap):
             th.DateTimeType,
             description="Only sync records updated after this date."
         )
-        
+
     ).to_dict()
 
-    def discover_streams(self) -> List[Stream]:
-        """Return a list of discovered streams."""
-        return [stream_class(tap=self) for stream_class in STREAM_TYPES]
+    def discover_streams(self) -> list[streams.ThinkificStream]:
+        """Return a list of available streams.
+        """
+        return [
+            streams.CoursesStream(self),
+            streams.EnrollmentsStream(self),
+        ]
+
+
+if __name__ == "__main__":
+    TapThinkific.cli()

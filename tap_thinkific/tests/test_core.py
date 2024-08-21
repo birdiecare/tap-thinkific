@@ -3,27 +3,25 @@
 import datetime
 import os
 import pytest
+from dotenv import load_dotenv
+load_dotenv()
 
-from singer_sdk.testing import get_standard_tap_tests
+from singer_sdk.testing import get_tap_test_class
 
-from tap_thinkific.tap import Tapthinkific
+from tap_thinkific.tap import TapThinkific
 
 SAMPLE_CONFIG = {
-    "start_date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d"),
+    "start_date": "2024-07-01",
     "api_key":  os.getenv('THINKIFIC_API_KEY'),
     "subdomain": os.getenv('THINKIFIC_SUBDOMAIN')
 }
 
 
 # Run standard built-in tap tests from the SDK:
-def test_standard_tap_tests():
-    """Run standard tap tests from the SDK."""
-    tests = get_standard_tap_tests(
-        Tapthinkific,
-        config=SAMPLE_CONFIG
-    )
-    for test in tests:
-        test()
+TestTapThinkific = get_tap_test_class(
+    tap_class=TapThinkific,
+    config=SAMPLE_CONFIG,
+)
 
 
-# Create additional tests as appropriate for your tap.
+# TODO: Create additional tests as appropriate for your tap.
